@@ -11,159 +11,40 @@ def PrintEntireScreen():
 
 def DirectionRedirect(KeyPress):
   if KeyPress == "a":
-    DirectionLeft()
+    cramAll(0)
   if KeyPress == "s":
-    DirectionDown()
+    cramAll(1)
   if KeyPress == "d":
-    DirectionRight()
+    cramAll(2)
   if KeyPress == "w":
-    DirectionUp()
+    cramAll(3)
 
+def rotateLeft(matrix):
+  matrix = list(zip(*reversed(matrix)))
+  for n in range(len(matrix)):
+    matrix[n] = list(matrix[n])
+  return matrix
 
-def DirectionLeft():
-  global x, y
+def cramAll(rotationAmount): # 0 = left, 1 = bottom, 2 = right, 3 = top
+  global screen
   x = 0
   y = 0
-  CramLeft()
-
-  
-
-def DirectionDown():
-  global x, y
-  x = 0
-  y = 0
-  CramDown()
-
-def DirectionRight():
-  global x, y
-  x = 3
-  y = 0
-  CramRight()
-
-def DirectionUp():
-  global x, y
-  x = 0
-  y = 0
-  CramUp()
-
-
-
-def CramLeft():
-  global x, y
-  for p in range (4):
-    for n in range (3):
-      if screen[y][x] == 0:
-        for m in range (3):
-          screen[y][x] = screen[y][x+1] 
-          x += 1
-        screen[y][3] = 0
-        x = 0
-      
-    x = 1
-    for n in range (2):
-      if screen[y][x] == 0:
-        for m in range (2):
-          screen[y][x] = screen[y][x+1]
-          x += 1
-        screen[y][3] = 0
-        x = 1
-      
-    x = 2
-    if screen[y][x] == 0:
-      screen[y][x] = screen[y][x+1]
-      x += 1
-      screen[y][3] = 0
-      x = 2
+  for n in range(rotationAmount):
+    screen = rotateLeft(screen)
+  for a in range(4):
+    for b in range(3):
+      x = b
+      for c in range (3-b):
+        if screen[y][x] == 0:
+          for d in range (3-b):
+            screen[y][x] = screen[y][x+1]
+            x += 1
+          screen[y][3] = 0
+          x = b
     y += 1
     x = 0
-
-def CramRight():
-  global x, y
-  for p in range (4):
-    for n in range (3):
-      if screen[y][x] == 0:
-        for m in range (3):
-          screen[y][x] = screen[y][x-1] 
-          x -= 1
-        screen[y][0] = 0
-        x = 3
-      
-    x = 2
-    for n in range (2):
-      if screen[y][x] == 0:
-        for m in range (2):
-          screen[y][x] = screen[y][x-1]
-          x -= 1
-        screen[y][0] = 0
-        x = 2
-      
-    x = 1
-    if screen[y][x] == 0:
-      screen[y][x] = screen[y][x-1]
-      x -= 1
-      screen[y][0] = 0
-      x = 1
-    y -= 1
-    x = 3
-
-def CramUp():
-  global x, y
-  for p in range (4):
-    for n in range (3):
-      if screen[x][y] == 0:
-        for m in range (3):
-          screen[x][y] = screen[x+1][y] 
-          x += 1
-        screen[3][y] = 0
-        x = 0
-      
-    x = 1
-    for n in range (2):
-      if screen[x][y] == 0:
-        for m in range (2):
-          screen[x][y] = screen[x+1][y]
-          x += 1
-        screen[3][y] = 0
-        x = 1
-      
-    x = 2
-    if screen[x][y] == 0:
-      screen[x][y] = screen[x+1][y]
-      x += 1
-      screen[3][x] = 0
-      x = 2
-    y += 1
-    x = 0
-
-def CramDown():
-  global x, y
-  for p in range (4):
-    for n in range (3):
-      if screen[x][y] == 0:
-        for m in range (3):
-          screen[x][y] = screen[x-1][y] 
-          x -= 1
-        screen[0][y] = 0
-        x = 3
-      
-    x = 2
-    for n in range (2):
-      if screen[x][y] == 0:
-        for m in range (2):
-          screen[x][y] = screen[x-1][y]
-          x -= 1
-        screen[0][y] = 0
-        x = 2
-      
-    x = 1
-    if screen[x][y] == 0:
-      screen[x][y] = screen[x-1][y]
-      x -= 1
-      screen[0][y] = 0
-      x = 1
-    y -= 1
-    x = 3
-
+  for n in range(4-rotationAmount):
+    screen = rotateLeft(screen)
 
 screen = [[2, 4, 8, 16],
           [0, 0, 0, 0],
@@ -174,7 +55,7 @@ z = 0
 
 PrintEntireScreen()
 
-while z == 0: 
+while z == 0:
   KeyPress = str(input("what direction do you want to go: WASD     |"))
   os.system("clear") #change clear to cls for windows
 
@@ -183,3 +64,4 @@ while z == 0:
     PrintEntireScreen()
   else:
     print ("You have to enter a letter from W A S D, W is up, A is left, S is down, and D is right!")
+
