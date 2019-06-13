@@ -1,4 +1,14 @@
 import os
+import math
+import random
+
+global screen
+global screen2
+
+screen = [[0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0]] 
 
 def PrintEntireScreen():
     for line in screen:
@@ -9,21 +19,103 @@ def PrintEntireScreen():
         print(n, end=spaces)
       print("\n\n")
 
-def DirectionRedirect(KeyPress):
-  if KeyPress == "a":
-    cramAll(0)
-  if KeyPress == "s":
-    cramAll(1)
-  if KeyPress == "d":
-    cramAll(2)
-  if KeyPress == "w":
-    cramAll(3)
+def spawnNumb():
+  WhichNumb()
+  WhereNumb()
+  PlaceNumb()
 
-def rotateLeft(matrix):
-  matrix = list(zip(*reversed(matrix)))
-  for n in range(len(matrix)):
-    matrix[n] = list(matrix[n])
-  return matrix
+def WhichNumb():
+  global Is4Or2
+  Is4Or2 = random.randint(1, 10)
+  if Is4Or2 > 9:
+    Is4Or2 = 4
+  else:
+    Is4Or2 = 2
+
+def WhereNumb():
+  x = 0
+  y = 0
+  global Which0
+  Which0 = 0
+  HowMany0 = 0
+  for m in range (4):
+    for i in range (4):
+      if screen[y][x] == 0:
+        HowMany0 += 1
+      x += 1
+    y += 1
+    x = 0
+  if HowMany0 == 0:
+    print("GAME OVER")
+    exit()
+  else:
+    Which0 = random.randint(1, HowMany0)
+
+def PlaceNumb():
+  r = 0
+  y = 0
+  x = 0
+  global Wich0
+  global Is4Or2
+  for m in range (4):
+    for i in range (4):
+      if screen[y][x] == 0:
+        r += 1
+        if r == Which0:
+          screen[y][x] = Is4Or2
+      x += 1
+    y += 1
+    x = 0
+
+def DirectionRedirect(KeyPress):
+
+  n = 0
+  global screen2
+  screen2 = screen.copy()
+
+  if KeyPress == "a":
+    n = 4
+
+  if KeyPress == "s":
+    n = 1
+
+  if KeyPress == "d":
+    n = 2
+
+  if KeyPress == "w":
+    n = 3
+  
+  cramAll(n)
+  addAll(n)
+  cramAll(n)
+
+  if screen != screen2:
+    spawnNumb()
+
+def addAll(rotationAmount):
+  global screen
+  x = 0
+  y = 0
+  store = 0
+  for n in range(rotationAmount):
+    screen = rotateLeft(screen)
+  for a in range(4):
+    for b in range (3):
+      store = screen[y][x]
+      if screen[y][x+1] == store:
+        screen[y][x] += screen[y][x]
+        screen[y][x+1] = 0
+      x += 1
+    x = 0
+    y += 1
+  for n in range(4-rotationAmount):
+    screen = rotateLeft(screen)
+
+def rotateLeft(screen):
+  screen = list(zip(*reversed(screen)))
+  for n in range(len(screen)):
+    screen[n] = list(screen[n])
+  return screen
 
 def cramAll(rotationAmount): # 0 = left, 1 = bottom, 2 = right, 3 = top
   global screen
@@ -44,14 +136,21 @@ def cramAll(rotationAmount): # 0 = left, 1 = bottom, 2 = right, 3 = top
     y += 1
     x = 0
   for n in range(4-rotationAmount):
-    screen = rotateLeft(screen)
-
-screen = [[2, 4, 8, 16],
-          [0, 0, 0, 0],
-          [0, 0, 16, 32],
-          [4, 8, 4, 64]]
+    screen = rotateLeft(screen)         
 
 z = 0
+
+f = "s"
+a
+while f != "f":
+
+  print ("Press f to start")
+  f = str(input())
+
+os.system("clear") #change clear to cls for windows
+
+spawnNumb()
+spawnNumb()
 
 PrintEntireScreen()
 
@@ -64,4 +163,3 @@ while z == 0:
     PrintEntireScreen()
   else:
     print ("You have to enter a letter from W A S D, W is up, A is left, S is down, and D is right!")
-
